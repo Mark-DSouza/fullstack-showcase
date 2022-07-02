@@ -1,19 +1,27 @@
 import express from "express";
-import { Query, Resolver, buildSchema } from "type-graphql";
+import { buildSchema } from "type-graphql";
 import { ApolloServer } from "apollo-server-express";
 import "reflect-metadata";
+import { DataSource } from "typeorm";
+import { RegisterResolver } from "./modules/user/Register";
 
-@Resolver()
-class HelloResolver {
-  @Query(() => String)
-  async hello() {
-    return "Hello, World!";
-  }
-}
+const AppDataSource = new DataSource({
+  name: "default",
+  type: "postgres",
+  host: "localhost",
+  port: 5432,
+  username: "postgres",
+  password: "postgres",
+  database: "fullstack_showcase",
+  synchronize: true,
+  logging: true,
+  entities: ["src/entity/*.*"],
+});
 
 const main = async () => {
+  await AppDataSource.initialize();
   const schema = await buildSchema({
-    resolvers: [HelloResolver],
+    resolvers: [RegisterResolver],
   });
 
   const server = new ApolloServer({ schema });
