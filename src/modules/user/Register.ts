@@ -1,24 +1,12 @@
 import { User } from "../../entity/User";
-import {
-  Arg,
-  FieldResolver,
-  Mutation,
-  Query,
-  Resolver,
-  Root,
-} from "type-graphql";
+import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import * as bcrypt from "bcrypt";
 
-@Resolver(() => User)
+@Resolver()
 export class RegisterResolver {
   @Query(() => String)
   async hello() {
     return "Hello, World!";
-  }
-
-  @FieldResolver()
-  name(@Root() parent: User): string {
-    return `${parent.firstName} ${parent.lastName}`;
   }
 
   @Mutation(() => User)
