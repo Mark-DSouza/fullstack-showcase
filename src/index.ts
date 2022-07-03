@@ -8,10 +8,10 @@ import { LoginResolver } from "./modules/user/Login";
 import { MeResolver } from "./modules/user/Me";
 import session from "express-session";
 import connectRedis from "connect-redis";
-import Redis from "ioredis";
 import cors from "cors";
+import { redis } from "./redis";
 import { MyContext } from "./types/MyContext";
-import { sendEmail } from "./modules/utils/sendEmail";
+import { ConfirmUserResolver } from "./modules/user/ConfirmUser";
 
 const AppDataSource = new DataSource({
   name: "default",
@@ -30,7 +30,7 @@ const main = async () => {
   await AppDataSource.initialize();
 
   const schema = await buildSchema({
-    resolvers: [RegisterResolver, LoginResolver, MeResolver],
+    resolvers: [RegisterResolver, LoginResolver, MeResolver, ConfirmUserResolver],
     authChecker: ({ context: { req } }) => {
       return !!req.session.userId;
     },
@@ -51,12 +51,11 @@ const main = async () => {
   );
 
   const RedisStore = connectRedis(session);
-  const redisClient = new Redis();
 
   app.use(
     session({
       store: new RedisStore({
-        client: redisClient,
+        client: redis,
       }),
       name: "qid",
       secret: "asdfghjkl;",
@@ -72,7 +71,6 @@ const main = async () => {
 
   server.applyMiddleware({ app });
 
-  await sendEmail();
   app.listen(4000, () =>
     console.log("App is running on https://localhost:4000/graphql")
   );
