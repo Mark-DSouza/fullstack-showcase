@@ -11,6 +11,7 @@ import connectRedis from "connect-redis";
 import Redis from "ioredis";
 import cors from "cors";
 import { MyContext } from "./types/MyContext";
+import { sendEmail } from "./modules/utils/sendEmail";
 
 const AppDataSource = new DataSource({
   name: "default",
@@ -71,6 +72,7 @@ const main = async () => {
 
   server.applyMiddleware({ app });
 
+  await sendEmail();
   app.listen(4000, () =>
     console.log("App is running on https://localhost:4000/graphql")
   );
