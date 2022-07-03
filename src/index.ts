@@ -10,7 +10,7 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import Redis from "ioredis";
 import cors from "cors";
-import {MyContext} from "./types/MyContext";
+import { MyContext } from "./types/MyContext";
 
 const AppDataSource = new DataSource({
   name: "default",
@@ -30,6 +30,9 @@ const main = async () => {
 
   const schema = await buildSchema({
     resolvers: [RegisterResolver, LoginResolver, MeResolver],
+    authChecker: ({ context: { req } }) => {
+      return !!req.session.userId;
+    },
   });
 
   const server = new ApolloServer({
