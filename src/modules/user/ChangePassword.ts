@@ -1,6 +1,6 @@
-import { MyContext } from './../../types/MyContext';
+import { MyContext } from "./../../types/MyContext";
 import bcrypt from "bcrypt";
-import { ChangePasswordInput } from "./changePassword/changePasswordInput";
+import { ChangePasswordInput } from "./changePassword/ChangePasswordInput";
 import { User } from "../../entity/User";
 import { redis } from "../../redis";
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
@@ -11,7 +11,7 @@ export class ChangePasswordResolver {
   @Mutation(() => User, { nullable: true })
   async changePassword(
     @Arg("data") { token, password }: ChangePasswordInput,
-    @Ctx() ctx: MyContext,
+    @Ctx() ctx: MyContext
   ): Promise<User | null> {
     const userId = await redis.get(forgotPasswordPrefix + token);
 
