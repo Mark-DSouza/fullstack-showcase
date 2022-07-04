@@ -8,7 +8,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { User } from "../../entity/User";
-import * as bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 import { RegisterInput } from "./register/RegisterInput";
 
 import { isAuth } from "./../middleware/isAuth";

@@ -1,6 +1,6 @@
 import { User } from "../../entity/User";
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
-import * as bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 import { MyContext } from "../../types/MyContext";
 
 @Resolver()
@@ -14,7 +14,6 @@ export class LoginResolver {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      console.log("Failing to find user");
       return null;
     }
 
